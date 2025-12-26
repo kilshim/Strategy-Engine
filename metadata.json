@@ -1,0 +1,5 @@
+{
+  "name": "Strategy Engine",
+  "description": "A high-performance business intelligence workflow engine that transforms raw ideas into structured PRDs, SWOT analyses, and strategic roadmaps using Gemini 2.5 Flash.",
+  "requestFramePermissions": []
+}
