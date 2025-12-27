@@ -11,20 +11,23 @@ export const generateStrategy = async (
   const finalApiKey = apiKey || process.env.API_KEY;
   
   if (!finalApiKey) {
-    throw new Error("API 키가 필요합니다.");
+    throw new Error("API 키가 필요합니다. 설정에서 API 키를 입력해주세요.");
   }
 
+  // 매 요청마다 새로운 인스턴스를 생성하여 최신 API 키 반영 보장
   const ai = new GoogleGenAI({ apiKey: finalApiKey });
   const frameworkPrompt = getFrameworkSpecificPrompt(framework, prompt);
   
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
+      // Pro 모델은 무료 티어에서 할당량이 매우 적거나 제한될 수 있으므로
+      // 더 빠르고 할당량이 넉넉한 Flash 모델을 기본으로 사용합니다.
+      model: 'gemini-3-flash-preview',
       contents: frameworkPrompt,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         responseMimeType: "application/json",
-        temperature: 0.7, // 풍부하고 창의적인 통찰을 위해 온도를 살짝 높임
+        temperature: 0.7,
       },
     });
 
@@ -34,6 +37,17 @@ export const generateStrategy = async (
     return JSON.parse(text);
   } catch (error: any) {
     console.error("Gemini API Error:", error);
+    
+    // 할당량 초과(429) 에러에 대한 친절한 안내
+    if (error.message?.includes("429") || error.message?.includes("quota")) {
+      throw new Error("API 사용량이 초과되었습니다. 잠시 후 다시 시도하거나, 설정에서 개인 API 키를 등록해 주세요.");
+    }
+    
+    // API 키가 유효하지 않은 경우
+    if (error.message?.includes("API key not valid") || error.message?.includes("403")) {
+      throw new Error("유효하지 않은 API 키입니다. 설정에서 키를 확인해 주세요.");
+    }
+
     throw new Error(error.message || "전략 분석 엔진과의 통신에 실패했습니다.");
   }
 };
