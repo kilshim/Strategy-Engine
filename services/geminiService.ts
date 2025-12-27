@@ -24,7 +24,7 @@ export const generateStrategy = async (
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         responseMimeType: "application/json",
-        temperature: 0.5,
+        temperature: 0.7, // 풍부하고 창의적인 통찰을 위해 온도를 살짝 높임
       },
     });
 
@@ -42,82 +42,91 @@ const getFrameworkSpecificPrompt = (framework: FrameworkType, input: string): st
   switch (framework) {
     case FrameworkType.SUMMARY:
       return `비즈니스 아이디어: "${input}". 
-      다음 구조의 JSON으로 통합 전략 요약을 제공해줘:
+      다음 구조의 JSON으로 통합 전략 요약을 제공해줘. 각 항목은 전문가의 시각에서 아주 깊이 있고 풍성하게 설명해줘:
       {
-        "core_value": "고유 가치 한 줄 요약",
-        "vision": "장기적 비전",
-        "swot_highlights": {"S": "강점", "W": "약점", "O": "기회", "T": "위협"},
-        "roadmap_key_phases": ["단계 1", "단계 2", "단계 3"],
-        "revenue_model": "수익 모델 핵심",
-        "critical_success_factor": "가장 중요한 성공 요인"
+        "core_value": "비즈니스의 존재 이유와 시장을 압도할 핵심 가치 (강력한 슬로건 포함)",
+        "vision": "향후 5년 내 시장에서 점유할 독보적인 위치와 미래 상상도",
+        "swot_highlights": {
+          "S": "강점: 현재 가진 자산 중 가장 강력한 현금화 도구와 그 근거",
+          "W": "약점: 성장을 가로막는 리스크와 이를 상쇄할 전략적 보완책",
+          "O": "기회: 시장 트렌드에서 포착된 가장 수익성 높은 진입 시점",
+          "T": "위협: 경쟁사의 공격이나 거시 환경 변화에 대한 방어 시나리오"
+        },
+        "roadmap_key_phases": [
+          "1단계: 시장 검증 및 초기 핵심 고객(Early Adopters) 확보 전략",
+          "2단계: 제품 고도화 및 시장 점유율 확대를 위한 스케일업 전략",
+          "3단계: 브랜드 로열티 구축 및 비즈니스 생태계 확장 전략"
+        ],
+        "revenue_model": "가장 효율적인 수익 창출 구조와 단가 책정 로직에 대한 상세 분석",
+        "critical_success_factor": "이 사업의 성패를 가를 단 하나의 핵심 지표(North Star Metric)와 관리 방법"
       }`;
     case FrameworkType.SWOT:
       return `비즈니스: "${input}". 
-      다음 구조의 JSON으로 SWOT 분석을 해줘:
+      다음 구조의 JSON으로 SWOT 분석을 해줘. 항목당 최소 4개 이상의 아주 구체적인 통찰을 담아줘:
       {
-        "strengths": ["강점 리스트"],
-        "weaknesses": ["약점 리스트"],
-        "opportunities": ["기회 리스트"],
-        "threats": ["위협 리스트"],
-        "recommendations": ["핵심 전략 제언"]
+        "strengths": ["경쟁사가 따라올 수 없는 우리만의 내부적 역량과 자산"],
+        "weaknesses": ["현재 내부적으로 해결해야 할 운영상, 기술상의 한계점"],
+        "opportunities": ["규제 변화, 소비자 인식 변화 등 우리가 이용할 수 있는 외부 호재"],
+        "threats": ["대안 서비스의 등장이나 원가 상승 등 우리를 위협하는 외부 요인"],
+        "recommendations": ["분석 결과를 종합하여 시장에서 승리하기 위한 구체적인 실행 지침 3가지 (이유 포함)"]
       }`;
     case FrameworkType.ROADMAP:
       return `프로젝트: "${input}". 
-      다음 구조의 JSON으로 12개월 로드맵을 작성해줘:
+      다음 구조의 JSON으로 전문적인 12개월 로드맵을 작성해줘. 각 분기는 하나의 완성된 스토리가 되어야 해:
       {
         "quarters": [
-          {"q": "Q1", "title": "단계명", "milestones": ["항목"], "goal": "핵심 목표"},
-          {"q": "Q2", "title": "단계명", "milestones": ["항목"], "goal": "핵심 목표"},
-          {"q": "Q3", "title": "단계명", "milestones": ["항목"], "goal": "핵심 목표"},
-          {"q": "Q4", "title": "단계명", "milestones": ["항목"], "goal": "핵심 목표"}
+          {"q": "Q1: 기초 구축", "title": "MVP 개발 및 시장 가설 검증", "milestones": ["실행해야 할 구체적인 마일스톤 3개"], "goal": "정량적인 성공 측정 기준"},
+          {"q": "Q2: 시장 진입", "title": "핵심 채널 확보 및 공격적 마케팅", "milestones": ["실행해야 할 구체적인 마일스톤 3개"], "goal": "고객 확보 비용(CAC) 최적화 목표"},
+          {"q": "Q3: 확장 성장", "title": "서비스 자동화 및 운영 효율화", "milestones": ["실행해야 할 구체적인 마일스톤 3개"], "goal": "고객 유지율(Retention) 목표치"},
+          {"q": "Q4: 수익 극대화", "title": "비즈니스 모델 고도화 및 다각화", "milestones": ["실행해야 할 구체적인 마일스톤 3개"], "goal": "매출 및 이익률 달성 목표"}
         ]
       }`;
     case FrameworkType.MCKINSEY_7S:
       return `조직/비즈니스: "${input}". 
-      다음 구조의 JSON으로 맥킨지 7S 분석을 해줘:
+      다음 구조의 JSON으로 맥킨지 7S 분석을 해줘. 조직 운영의 효율성을 극대화할 수 있는 진단이 필요해:
       {
         "hard_elements": {
-          "strategy": "전략 핵심",
-          "structure": "조직 구조 제언",
-          "systems": "필요 시스템/인프라"
+          "strategy": "지속 가능한 경쟁 우위를 점하기 위한 중장기 계획",
+          "structure": "의사결정 속도를 높이고 책임을 명확히 할 조직 구조 제언",
+          "systems": "업무의 일관성과 효율성을 보장할 프로세스와 IT 시스템"
         },
         "soft_elements": {
-          "shared_values": "공유 가치/비전",
-          "style": "리더십 스타일/문화",
-          "staff": "필요 인재 구성",
-          "skills": "핵심 보유 역량"
+          "shared_values": "조직 구성원들을 하나로 묶어줄 핵심 철학과 신념",
+          "style": "리더십의 방식과 조직 내 커뮤니케이션 문화의 지향점",
+          "staff": "현재 조직에 가장 시급한 인적 자원과 인재상",
+          "skills": "시장에서 승리하기 위해 조직 전체가 보유해야 할 핵심 역량"
         },
         "alignment_score": 0~100,
-        "summary": "총평 및 개선 방향"
+        "summary": "7가지 요소의 정렬 상태에 대한 총평과 조직 혁신을 위한 핵심 제언"
       }`;
     case FrameworkType.PRD:
       return `제품 아이디어: "${input}". 
-      다음 구조의 JSON으로 PRD 핵심 내용을 도출해줘:
+      다음 구조의 JSON으로 PRD(제품 요구사항 문서)를 도출해줘. 실무 기획자가 바로 사용할 수 있는 수준이어야 해:
       {
-        "background": "추진 배경",
-        "user_target": ["주요 사용자층"],
+        "background": "이 제품이 해결하고자 하는 시장의 근본적인 문제와 탄생 배경",
+        "user_target": ["인구통계학적, 심리학적으로 정의된 구체적인 페르소나들"],
         "core_features": [
-          {"feature": "기능명", "priority": "P0/P1/P2", "description": "설명"}
+          {"feature": "기능명", "priority": "P0~P2", "description": "기능의 상세 정의와 이 기능이 사용자 가치를 어떻게 실현하는지 설명"}
         ],
-        "user_stories": ["유저 스토리"],
-        "success_metrics": ["성공 지표"]
+        "user_stories": ["사용자가 겪는 시나리오와 그에 따른 제품의 가치 체감 경로"],
+        "success_metrics": ["제품의 안착 여부를 판단할 구체적인 핵심 성과 지표(KPI) 리스트"]
       }`;
     case FrameworkType.LEAN_CANVAS:
       return `비즈니스 모델 아이디어: "${input}". 
-      다음 구조의 린 캔버스 JSON 데이터를 상세히 분석하여 모든 키값을 채워줘:
+      린 캔버스의 모든 항목을 논리적이고 풍부하게 분석해줘:
       {
-        "problem": ["주요 문제점 3가지"],
-        "solution": ["핵심 해결책 1-2가지"],
-        "key_metrics": ["측정 가능한 핵심 지표 2가지"],
-        "uvp": "독보적 가치 제안 (Unique Value Proposition) 1문장",
-        "unfair_advantage": "경쟁 우위 (따라하기 힘든 강점) 1문장",
-        "channels": ["고객 유입/획득 채널 2가지"],
-        "customer_segments": ["타겟 고객 및 얼리 어답터 정의"],
-        "cost_structure": ["주요 비용 항목 2-3가지"],
-        "revenue_streams": ["수수료, 구독료 등 수익 창출 방식"]
+        "problem": ["고객이 느끼는 가장 고통스러운 Pain Points 3가지와 그 이유"],
+        "solution": ["각 문제를 완벽하게 해소할 제품/서비스의 핵심 메커니즘"],
+        "key_metrics": ["사업의 생존과 성장을 증명할 수 있는 결정적인 숫자들"],
+        "uvp": "경쟁사와 비교했을 때 고객이 반드시 우리를 선택해야만 하는 압도적인 이유",
+        "unfair_advantage": "자본과 인력을 가진 대기업도 쉽게 카피할 수 없는 우리만의 해자(Moat)",
+        "channels": ["고객에게 도달하는 가장 비용 효율적인 경로와 마케팅 전략"],
+        "customer_segments": ["우리의 가치에 가장 먼저 반응할 핵심 고객층과 타겟 확장 순서"],
+        "cost_structure": ["초기 및 운영 단계에서 발생하는 주요 비용 항목과 관리 포인트"],
+        "revenue_streams": ["수익 극대화를 위한 다각화된 매출 구조와 현금 흐름 창출 방안"]
       }`;
     default:
       return `아이디어: "${input}". 
-      해당 프레임워크에 맞는 상세 데이터를 JSON 형식으로 분석해줘.`;
+      해당 프레임워크에 맞는 전문적인 전략 데이터를 JSON 형식으로 아주 상세하고 풍부하게 도출해줘.`;
   }
 };
