@@ -10,7 +10,7 @@ import {
   TrendingUp, Calendar, Zap, Shield, Briefcase, Activity,
   AlertCircle, Menu, Settings, Key, Sun, Moon,
   Users, Wrench, Network, Star, RefreshCcw, Download, Image as ImageIcon,
-  ArrowRight, Sparkles
+  ArrowRight, Sparkles, ExternalLink
 } from 'lucide-react';
 
 // --- Visual Infographic Components ---
@@ -598,6 +598,14 @@ const App: React.FC = () => {
             </button>
           )
         )}
+        <a 
+          href="https://xn--design-hl6wo12cquiba7767a.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block text-center text-[11px] font-semibold text-slate-400 dark:text-slate-600 hover:text-indigo-500 transition-colors mt-2"
+        >
+          떨림과울림Design.com
+        </a>
       </div>
     </div>
   );
